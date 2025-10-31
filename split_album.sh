@@ -25,33 +25,33 @@
 shopt -s nullglob
 
 startdir="$1"
-
+logfile="/test.log"
 if [ -z "$startdir" ]; then 
     echo "ERROR: Expected <startdir> as the 1st argument but none given, <startdir> should be the Torrent rootfolder (\"%R\") from qBittorrent"
     exit 1
 fi
 
 
-echo `date` "Download complete: $startdir" >> /store/downloads/test.log
+echo `date` "Download complete: $startdir" >> $logfile
 
 if [ -d "$startdir" ]; then
     while IFS= read -r -d '' dir; do
         cd "${dir}"
-        echo `date` "    ...checking $dir" >> /store/downloads/test.log
+        echo `date` "    ...checking $dir" >> $logfile
         flacfiles=`find "$dir" -type f -regextype posix-extended -regex '.*.(flac|ape|m4a|wv|wav)' -printf x | wc -c`
         if [ $flacfiles -eq "1" ]; then
             flacname=`find "${dir}" -type f -regextype posix-extended -regex '.*.(flac|ape|m4a|wv|wav)'`
             flacclean=${flacname%.*}
             if [ -f "$flacclean.cue" ] || [ -f "$flacname.cue" ]; then
-                echo `date` "    ...extracting $flacname" >> /store/downloads/test.log
+                echo `date` "    ...extracting $flacname" >> $logfile
 								~/go/bin/unflac -n "songs/{{- printf .Input.TrackNumberFmt .Track.Number}} - {{.Track.Title | Elem}}" 
                 
             fi
         else
-            echo `date` "    ...nothing to do" >> /store/downloads/test.log
+            echo `date` "    ...nothing to do" >> $logfile
         fi
     done < <(find "$startdir" -type d -print0)
 else
-    echo `date` "    ...not a directory, nothing to do" >> /store/downloads/test.log
+    echo `date` "    ...not a directory, nothing to do" >> $logfile
 fi
-echo `date` "    Done!" >> /store/downloads/test.log
+echo `date` "    Done!" >> $logfile
