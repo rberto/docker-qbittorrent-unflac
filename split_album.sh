@@ -44,7 +44,7 @@ if [ -d "$startdir" ]; then
             flacclean=${flacname%.*}
             if [ -f "$flacclean.cue" ] || [ -f "$flacname.cue" ]; then
                 echo `date` "    ...extracting $flacname" >> $logfile
-								~/go/bin/unflac -n "songs/{{- printf .Input.TrackNumberFmt .Track.Number}} - {{.Track.Title | Elem}}" 
+								/usr/local/go/bin/unflac -n "songs/{{- printf .Input.TrackNumberFmt .Track.Number}} - {{.Track.Title | Elem}}" 
                 
             fi
         else
