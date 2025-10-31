@@ -23,7 +23,8 @@ RUN chmod +x /usr/local/split_album.sh
 
 ENV PATH="/usr/local/go/bin:${PATH}"
 
-RUN go install git.sr.ht/~ft/unflac@latest
+# install unflac in /usr/local/bin/
+RUN GOPATH="/usr/local/" go install git.sr.ht/~ft/unflac@latest
 
 # RUN /usr/local/split_album.sh
 
