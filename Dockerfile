@@ -17,10 +17,21 @@ ENV HOME="/config" \
 XDG_CONFIG_HOME="/config" \
 XDG_DATA_HOME="/config"
 
+COPY --from=golang:alpine /usr/local/go/ /usr/local/go/
+ADD ./split_album.sh /usr/local/split_album.sh
+RUN chmod +x /usr/local/split_album.sh
+
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+RUN go install git.sr.ht/~ft/unflac@latest
+
+# RUN /usr/local/split_album.sh
+
 # install runtime packages and qbitorrent-cli
 RUN \
   echo "**** install packages ****" && \
   apk add --no-cache \
+	  ffmpeg \
     grep \
     icu-libs \
     p7zip \
